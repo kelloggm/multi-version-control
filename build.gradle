@@ -6,11 +6,23 @@
  * user guide available at https://docs.gradle.org/3.4.1/userguide/tutorial_java_projects.html
  */
 
+// for the CF plugin
+buildscript {
+  repositories {
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+  }
+
+  dependencies {
+    classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.3-SNAPSHOT'
+  }
+}
+
 plugins {
   id 'application'
   id 'java'
   id 'com.github.johnrengelman.shadow' version '2.0.4'
-  id 'org.checkerframework' version '0.1.0'
+  id 'com.jaredsburrows.checkerframework' version '0.2.2'
+  //id 'org.checkerframework' version '0.1.0'
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -33,15 +45,19 @@ dependencies {
   implementation 'org.plumelib:options:1.0.0'
   implementation 'org.plumelib:plume-util:1.0.0'
 
-  annotationProcessor 'org.checkerframework:checker:2.+'
-  annotationProcessor 'org.checkerframework:jdk8:2.+'
+//  annotationProcessor 'org.checkerframework:checker:2.+'
+//  annotationProcessor 'org.checkerframework:jdk8:2.+'
 }
 
 // Define the main class for the application
 mainClassName = 'org.plumelib.multiversioncontrol.MultiVersionControl'
 
-checkerframework.addChecker('org.checkerframework.checker.nullness.NullnessChecker')
-checkerframework.addChecker('org.checkerframework.checker.regex.RegexChecker')
+checkerFramework {
+    checkers = [
+        'org.checkerframework.checker.nullness.NullnessChecker',
+	'org.checkerframework.checker.regex.RegexChecker'
+    ]
+}
 
 // Turn Javadoc warnings into errors.
 javadoc {
